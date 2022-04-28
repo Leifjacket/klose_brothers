@@ -44,7 +44,7 @@ class BowlingCalculator {
                     frames++;
                 }
             } else {
-                //calculation for frame 10
+                //Calculation for frame 10
                 //Check if bonus throw
                 overallScore = overallScore + this.throws[this.throws.length-2] + this.throws[this.throws.length-1];
                 if(this.throws.length-3==roll){
@@ -61,8 +61,5 @@ class BowlingCalculator {
         return this.calculateScore();
     }
 
-    generateFrame(){
-        return null;
-    }
 }
 module.exports = BowlingCalculator
