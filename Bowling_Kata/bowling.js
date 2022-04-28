@@ -11,54 +11,47 @@ class BowlingCalculator {
         this.throws = throws;
     }
 
-    bonusThrow(){
-        //is true when there are 3 throws in the last frame
-        var bonusThrowsInLastFrame = false;
-
-        if(this.throws[this.throws.length-3] == 10 || this.throws[this.throws.length-3] + this.throws[this.throws.length-2] == 10 ) {
-            bonusThrowsInLastFrame = true;
-        }
-        return bonusThrowsInLastFrame;
-    }
-
     calculateScore(){
         //Calculates the Overall score and get returned
         var overallScore = 0;
 
+        //Tracks the frames played, because with strikes, frames and rolls can differ
+        var frames = 1;
         //When a Strike in frames 1-9 got thrown this is true, otherwise false
         var oddStrike = false;
-        var lastThrows = 2;
-        if(this.bonusThrow()){
-            lastThrows = 3;
-        }
         for(var roll = 0; roll < this.throws.length;roll++){
 
             //calculation for frame 1-9
-            if(roll < this.throws.length-lastThrows) {
+            if(frames<10) {
                 //is it a spare, strike, or not cleared?
-                if(this.throws[roll] + this.throws[roll+1] == 10 && !oddStrike){
+                if(this.throws[roll] + this.throws[roll+1] == 10 && this.throws[roll]!= 10){
+                    //Spare
                     var spareValue = 10 + this.throws[roll+2];
                     overallScore = overallScore + spareValue;
                     //increase roll because we already counted the next roll aswell for the spare
                     roll++;
+                    frames++;
                 } else if(this.throws[roll]==10){
+                    //Strike
                     var strikeValue = 10 + this.throws[roll+1] + this.throws[roll+2];
                     overallScore = overallScore + strikeValue;
-                    // reverse oddStrike Boolean, important for calculating a Spare, for reference when 2 rolls add up to 10 points and it can be either the start of a frame or 2 different frames 
-                    oddStrike = !oddStrike;
+                    frames++;
                 } else {
-                    //normal points added for the frame
+                    //No Strike or Spare
                     overallScore = overallScore + this.throws[roll]+this.throws[roll+1];
                     //increase roll because we already counted the next roll aswell
                     roll++;
+                    frames++;
                 }
             } else {
                 //calculation for frame 10
+                //Check if bonus throw
                 overallScore = overallScore + this.throws[this.throws.length-2] + this.throws[this.throws.length-1];
-                if(this.bonusThrow()){
-                    overallScore = overallScore + this.throws[this.throws.length-2];
+                if(this.throws.length-3==roll){
+                    overallScore = overallScore + this.throws[this.throws.length-3];
+                    roll++;
                 }
-                roll = roll + 3;
+                roll = roll + 2;
             }
         }
         return overallScore;
@@ -67,6 +60,9 @@ class BowlingCalculator {
     getScore () {
         return this.calculateScore();
     }
-}
 
+    generateFrame(){
+        return null;
+    }
+}
 module.exports = BowlingCalculator
