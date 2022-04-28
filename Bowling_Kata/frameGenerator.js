@@ -37,7 +37,6 @@ const frameGenerator = {
                 }
             }
         }
-        console.log(randomThrowArray);
         return randomThrowArray;
     }
 }
